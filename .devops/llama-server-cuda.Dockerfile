@@ -11,6 +11,14 @@ FROM ${BASE_CUDA_DEV_CONTAINER} AS build
 # CUDA architecture to build for (defaults to all supported archs)
 ARG CUDA_DOCKER_ARCH=default
 
+# install cmake
+WORKDIR /tmp
+RUN tar -xf cmake-3.25.2-linux-x86_64.tar.gz  && \
+     cp -rd cmake-3.25.2-linux-x86_64/bin /usr/local/ && \
+     cp -rd cmake-3.25.2-linux-x86_64/doc /usr/local/  && \
+     cp -rd cmake-3.25.2-linux-x86_64/share /usr/local/ && \
+     rm -r /tmp/*
+
 RUN apt-get update && \
     apt-get install -y build-essential git cmake libcurl4-openssl-dev
 

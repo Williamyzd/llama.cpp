@@ -48,37 +48,6 @@ RUN apt-get update \
 
 COPY --from=build /app/lib/ /app
 
-### Full
-FROM base AS full
-
-COPY --from=build /app/full /app
-
-WORKDIR /app
-
-RUN apt-get update \
-    && apt-get install -y \
-    git \
-    python3 \
-    python3-pip \
-    && pip install --upgrade pip setuptools wheel \
-    && pip install -r requirements.txt \
-    && apt autoremove -y \
-    && apt clean -y \
-    && rm -rf /tmp/* /var/tmp/* \
-    && find /var/cache/apt/archives /var/lib/apt/lists -not -name lock -type f -delete \
-    && find /var/cache -type f -delete
-
-
-ENTRYPOINT ["/app/tools.sh"]
-
-### Light, CLI only
-FROM base AS light
-
-COPY --from=build /app/full/llama-cli /app
-
-WORKDIR /app
-
-ENTRYPOINT [ "/app/llama-cli" ]
 
 ### Server, Server only
 FROM base AS server

@@ -1,10 +1,10 @@
 ARG UBUNTU_VERSION=20.04
 # This needs to generally match the container host's environment.
-ARG CUDA_VERSION=11.4.3
+ARG CUDA_VERSION=11.4.0
 # Target the CUDA build image
-ARG BASE_CUDA_DEV_CONTAINER=nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+ARG BASE_CUDA_DEV_CONTAINER= ghcr.io/williamyzd/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
 
-ARG BASE_CUDA_RUN_CONTAINER=nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
+ARG BASE_CUDA_RUN_CONTAINER= ghcr.io/williamyzd/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
 
 FROM ${BASE_CUDA_DEV_CONTAINER} AS build
 

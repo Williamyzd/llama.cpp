@@ -1,6 +1,6 @@
 ARG UBUNTU_VERSION=20.04
 # This needs to generally match the container host's environment.
-ARG CUDA_VERSION=11.4.0
+ARG CUDA_VERSION=11.6.0
 # Target the CUDA build image
 ARG BASE_CUDA_DEV_CONTAINER= ghcr.io/williamyzd/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
 

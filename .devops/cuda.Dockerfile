@@ -1,6 +1,6 @@
 ARG UBUNTU_VERSION=20.04   # 修改为目标版本 # 如果目标版本为20.04，会出现时区问题和cmake版本过低问题，需要单独调整
 # This needs to generally match the container host's environment.
-ARG CUDA_VERSION=11.5.2  # 修改为目标版本
+ARG CUDA_VERSION=11.3.1  # 修改为目标版本
 # Target the CUDA build image
 ARG BASE_CUDA_DEV_CONTAINER=nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}  # 确保dockerhub中有该镜像
 

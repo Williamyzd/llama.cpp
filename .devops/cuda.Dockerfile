@@ -1,18 +1,27 @@
-ARG UBUNTU_VERSION=20.04
+ARG UBUNTU_VERSION=20.04   # 修改为目标版本 # 如果目标版本为20.04，会出现时区问题和cmake版本过低问题，需要单独调整
 # This needs to generally match the container host's environment.
-ARG CUDA_VERSION=11.6.0
+ARG CUDA_VERSION=11.5.2  # 修改为目标版本
 # Target the CUDA build image
-ARG BASE_CUDA_DEV_CONTAINER= nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+ARG BASE_CUDA_DEV_CONTAINER=nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}  # 确保dockerhub中有该镜像
 
-ARG BASE_CUDA_RUN_CONTAINER= nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
+ARG BASE_CUDA_RUN_CONTAINER=nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}  # 确保dockerhub中有该镜像
+ARG DEBIAN_FRONTEND=noninteractive
+
 
 FROM ${BASE_CUDA_DEV_CONTAINER} AS build
 
 # CUDA architecture to build for (defaults to all supported archs)
 ARG CUDA_DOCKER_ARCH=default
-
+# 版本为20.04时，需要单独调整时区问题，需要调整部分
+###########################################
+ENV TZ=Etc/UTC
 RUN apt-get update && \
-    apt-get install -y build-essential cmake python3 python3-pip git libcurl4-openssl-dev libgomp1
+     apt-get install -y tzdata wget tar  build-essential  python3 python3-pip git libcurl4-openssl-dev libgomp1 && \
+      wget https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5-linux-x86_64.tar.gz  && \
+      tar -zxvf cmake-3.31.5-linux-x86_64.tar.gz  && mv cmake-3.31.5-linux-x86_64 /opt/cmake && \ 
+      ln -s  /opt/cmake/bin/cmake  /usr/bin/cmake && cmake --version 
+###########################################
+
 
 WORKDIR /app
 
@@ -48,7 +57,7 @@ RUN apt-get update \
 
 COPY --from=build /app/lib/ /app
 
-
+# 此处删除了light full 等不必要的镜像信息，仅留了server信息
 ### Server, Server only
 FROM base AS server
 

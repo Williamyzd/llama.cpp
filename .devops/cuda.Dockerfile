@@ -5,15 +5,15 @@ ARG CUDA_VERSION=11.5.2  # 修改为目标版本
 ARG BASE_CUDA_DEV_CONTAINER=nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}  # 确保dockerhub中有该镜像
 
 ARG BASE_CUDA_RUN_CONTAINER=nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}  # 确保dockerhub中有该镜像
-ARG DEBIAN_FRONTEND=noninteractive
-
 
 FROM ${BASE_CUDA_DEV_CONTAINER} AS build
 
 # CUDA architecture to build for (defaults to all supported archs)
 ARG CUDA_DOCKER_ARCH=default
+
 # 版本为20.04时，需要单独调整时区问题，需要调整部分
 ###########################################
+ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 RUN apt-get update && \
      apt-get install -y tzdata wget tar  build-essential  python3 python3-pip git libcurl4-openssl-dev libgomp1 && \
